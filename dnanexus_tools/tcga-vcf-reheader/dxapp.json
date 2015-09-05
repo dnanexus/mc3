@@ -1,0 +1,61 @@
+{
+  "name": "tcga-vcf-reheader",
+  "title": "TCGA VCF reheader",
+  "dxapi": "1.0.0",
+  "inputSpec": [
+    {
+      "patterns": [
+        "*.vcf"
+      ],
+      "label": "Input VCF",
+      "help": "Input VCF",
+      "name": "input_vcf",
+      "class": "file"
+    },
+    {
+      "patterns": [
+        "*.yml", "*.yaml"
+      ],
+      "label": "Config yaml file",
+      "help": "YAML file describing the additions/changes to the header, including samples information",
+      "name": "config_yaml",
+      "class": "file"
+    },
+    {
+      "label": "Output prefix",
+      "help": "Output prefix",
+      "name": "output_vcf",
+      "class": "string",
+      "optional": true
+    }
+  ],
+  "outputSpec": [
+    {
+      "patterns": [
+        "*.vcf"
+      ],
+      "label": "Output VCF",
+      "help": "Output VCF",
+      "name": "output_vcf",
+      "class": "file"
+    }
+  ],
+  "runSpec": {
+    "execDepends": [
+      {
+        "package_manager": "pip",
+        "name": "pyyaml"
+      }
+    ],
+    "systemRequirements": {
+      "main": {
+        "instanceType": "mem1_ssd1_x4"
+      }
+    },
+    "file": "src/code.sh",
+    "interpreter": "bash"
+  },
+  "access": {
+    "network": ["*"]
+  }
+}
