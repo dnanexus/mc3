@@ -42,7 +42,7 @@ if [ -z "$output" ]; then
 fi
 
 # Varscan call through wrapper
-python VarScanSomaticVcf.py
+python VarScanSomaticVcf.py \
     "${normal_pileup_path}" \
     "${tumor_pileup_path}" \
     --min-coverage $min_coverage \
