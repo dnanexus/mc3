@@ -10,6 +10,8 @@ else
     output="${output}.vcf"
 fi
 
+samtools index "${bam_path}"
+
 # Call to fpfilter
 perl ~/fpfilter.pl \
     --vcf-file "${vcf_path}" \
