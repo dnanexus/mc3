@@ -18,11 +18,11 @@ muse.py \
   --normal-bam "${normal_bam_path}" \
   --normal-bam-index "${normal_bai_path/normal_bai/normal_bam}" \
   -f "${reference_path}" \
+  -m "${muse}" \
   -n `nproc`
 
 ls
 mkdir -p out/mutations
-sleep 100000000 
 mv out.vcf "out/mutations/${tumor_bam_name%.bam}.vcf"
 dx-upload-all-outputs
 

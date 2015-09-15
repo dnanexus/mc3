@@ -37,6 +37,14 @@
       "help": "Reference genome used to align BAMs",
       "class": "file",
       "patterns": ["*.fa.gz"]
+    },
+    {
+      "name": "muse",
+      "label": "MuSE Version",
+      "help": "Version of MuSE to run",
+      "class": "string",
+      "default": "MuSEv0.9.9.5",
+      "choices": ["MuSEv0.9.9.5", "MuSEv1.0rc"]
     }
   ],
   "outputSpec": [
