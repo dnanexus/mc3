@@ -86,15 +86,21 @@ def create_sniper_cmdline(namespace_dict, reference, tumor_bam, normal_bam, temp
         temp_output_file])
 
 def create_workspace(workdir, reference, tumor_bam, normal_bam):
-    symlink_workspace_file(workdir, reference + ".fai" , "ref_genome.fasta.fai"),
+
+    new_ref = symlink_workspace_file(workdir, reference, "ref_genome.fasta")
+    if not os.path.exists(reference + ".fai"):
+        print "Indexing", new_ref
+        subprocess.check_call( ["/usr/bin/samtools", "faidx", new_ref] )
+    else:
+        symlink_workspace_file(workdir, reference + ".fai" , "ref_genome.fasta.fai"),
     return (
             symlink_workspace_file(workdir, tumor_bam, "tumor.bam"),
             symlink_workspace_file(workdir, normal_bam, "normal.bam"),
-            symlink_workspace_file(workdir, reference, "ref_genome.fasta"),
+            new_ref
             )
 
 def symlink_workspace_file(workdir, original_file, new_file):
-    symlink_name = os.path.join(workdir, new_file)
+    symlink_name = os.path.join(os.path.abspath(workdir), new_file)
     os.symlink(os.path.abspath(original_file), symlink_name)
     return symlink_name
 
@@ -214,6 +220,7 @@ if __name__ == "__main__":
     check_if_tcga_header_specified(arg_dict) #this will throw if we're not ok with TCGA header args
 
     (workspace_tumor, workspace_normal, workspace_ref) = create_workspace(args.workdir, args.f, args.tumor_bam, args.normal_bam)
+    print (workspace_tumor, workspace_normal, workspace_ref)
     temp_output_file = os.path.join(args.workdir, "raw_output.vcf")
 
     execute(arg_dict, workspace_ref, workspace_tumor, workspace_normal, temp_output_file)
