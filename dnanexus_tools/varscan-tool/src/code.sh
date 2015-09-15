@@ -22,13 +22,13 @@ if [ -n "${tumor_purity}" ]; then
 fi
 
 if [[ "$strand_filter" == "true" ]]; then
-    strand_filter="--strand-filter"
+    strand_filter="--strand-filter 1"
 else
     strand_filter=""
 fi
 
 if [[ "$validation" == "true" ]]; then
-    validation="--validation"
+    validation="--validation 1"
 else
     validation=""
 fi
@@ -41,16 +41,10 @@ if [ -z "$output" ]; then
     echo "output name was determined to be $output"
 fi
 
-# Calculate 90% of memory size, for java
-mem_in_mb=`head -n1 /proc/meminfo | awk '{print int($2*0.9/1024/8)}'`
-java="java -Xmx${mem_in_mb}m"
-
-# Varscan call
-$java -jar ~/VarScan.v2.3.9.jar somatic \
+# Varscan call through wrapper
+python VarScanSomaticVcf.py
     "${normal_pileup_path}" \
     "${tumor_pileup_path}" \
-    somatic_output \
-    --output-vcf \
     --min-coverage $min_coverage \
     $min_coverage_normal \
     $min_coverage_tumor \
