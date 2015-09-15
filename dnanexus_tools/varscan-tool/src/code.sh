@@ -22,13 +22,13 @@ if [ -n "${tumor_purity}" ]; then
 fi
 
 if [[ "$strand_filter" == "true" ]]; then
-    strand_filter="--strand-filter 1"
+    strand_filter="--strand-filter"
 else
     strand_filter=""
 fi
 
 if [[ "$validation" == "true" ]]; then
-    validation="--validation 1"
+    validation="--validation"
 else
     validation=""
 fi
