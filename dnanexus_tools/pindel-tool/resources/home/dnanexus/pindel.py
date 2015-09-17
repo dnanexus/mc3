@@ -123,7 +123,7 @@ def move(avant, apres):
 
 def pindel2vcf(inputFastaFile, refName, pindel_file, vcf_file):
     date = str(time.strftime('%d/%m/%y',time.localtime()))
-    cmd = "pindel2vcf -p %s -r %s -R %s -d %s -v %s" % (pindel_file, inputFastaFile, refName, date, vcf_file)
+    cmd = "pindel2vcf -p %s -r %s -R %s -d %s -v %s -C OHSU" % (pindel_file, inputFastaFile, refName, date, vcf_file)
     return cmd
 
 
