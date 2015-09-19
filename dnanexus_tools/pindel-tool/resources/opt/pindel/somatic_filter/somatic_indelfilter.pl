@@ -55,7 +55,7 @@ my ( undef, $pindel2vcf_output ) = tempfile();
 # run pindel2vcf
 #
 my $pindel2vcf_command = "";
-$pindel2vcf_command = "$paras{'pindel2vcf'} -R $paras{'referencename'} -r $paras{'reference'} -p $nocomplex_output -d $paras{'referencedate'} -v $pindel2vcf_output";
+$pindel2vcf_command = "$paras{'pindel2vcf'} -C OHSU -R $paras{'referencename'} -r $paras{'reference'} -p $nocomplex_output -d $paras{'referencedate'} -v $pindel2vcf_output";
 print $pindel2vcf_command."\n";
 system( $pindel2vcf_command );
 

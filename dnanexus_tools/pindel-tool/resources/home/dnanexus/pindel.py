@@ -123,7 +123,7 @@ def move(avant, apres):
 
 def pindel2vcf(inputFastaFile, refName, pindel_file, vcf_file):
     date = str(time.strftime('%d/%m/%y',time.localtime()))
-    cmd = "pindel2vcf -p %s -r %s -R %s -d %s -v %s -C OHSU" % (pindel_file, inputFastaFile, refName, date, vcf_file)
+    cmd = "pindel2vcf4tcga -p %s -r %s -R %s -d %s -v %s -C OHSU" % (pindel_file, inputFastaFile, refName, date, vcf_file)
     return cmd
 
 
@@ -332,7 +332,7 @@ def __main__():
                 handle.write("indel.filter.vaf = %s\n" % (args.somatic_vaf))
                 handle.write("indel.filter.cov = %s\n" % (args.somatic_cov))
                 handle.write("indel.filter.hom = %s\n" % (args.somatic_hom))
-                handle.write("indel.filter.pindel2vcf = %s\n" % (which("pindel2vcf")))
+                handle.write("indel.filter.pindel2vcf = %s\n" % (which("pindel2vcf4tcga")))
                 handle.write("indel.filter.reference =  %s\n" % (inputFastaFile))
                 handle.write("indel.filter.referencename = %s\n" % (args.inputFastaName))
                 handle.write("indel.filter.referencedate = %s\n" % (datetime.datetime.now().strftime("%Y%m%d")) )
