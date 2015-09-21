@@ -62,7 +62,8 @@ $sampleArgs \
 $outputArgs \
 --number_of_procs `nproc` \
 --window_size $window_size \
-$reportArgs
+$reportArgs \
+$advanced_opts
 
 ls
 mkdir -p out/outputRawFile

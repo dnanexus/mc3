@@ -154,6 +154,13 @@
       "name": "output",
       "class": "string",
       "optional": true
+    },
+    {
+      "label": "advanced options",
+      "help": "adanved option passed as cmd line args to pindel.py wrapper",
+      "name": "advanced_opts",
+      "class": "string",
+      "optional": true
     }
   ],
   "outputSpec": [
