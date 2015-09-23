@@ -19,6 +19,7 @@ muse.py \
   --normal-bam-index "${normal_bai_path/normal_bai/normal_bam}" \
   -f "${reference_path}" \
   -m "${muse}" \
+  --mode "${mode}" \
   -n `nproc`
 
 ls
