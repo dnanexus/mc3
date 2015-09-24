@@ -107,9 +107,6 @@
   "runSpec": {
     "execDepends": [
       {
-        "name": "samtools"
-      },
-      {
         "package_manager": "pip",
         "name": "bx-python"
       }
