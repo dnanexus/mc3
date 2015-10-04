@@ -5,9 +5,11 @@ set -e -x -o pipefail
 dx-download-all-inputs --parallel
 
 if [ -z "${output}" ]; then
-    output="${vcf_prefix}.filtered.vcf"
+    annotated_output="${vcf_prefix}.annotated.vcf"
+    filtered_output="${vcf_prefix}.filtered.vcf"
 else
-    output="${output}.vcf"
+    annotated_output="${output}_annotated.vcf"
+    filtered_output="${output}_filtered.vcf"
 fi
 
 samtools index "${bam_path}"
@@ -19,7 +21,7 @@ perl ~/fpfilter.pl \
     --bam-index "${bam_path}.bai" \
     --sample "${sample}" \
     --reference "${reference_path}" \
-    --output "${output}" \
+    --output "${annotated_output}" \
     --min-read-pos "${min_read_pos}" \
     --min-var-freq "${min_var_freq}" \
     --min-var-count "${min_var_count}" \
@@ -31,9 +33,16 @@ perl ~/fpfilter.pl \
     --min-var-dist-3 "${min_var_dist_3}"
 
 
-ls
-mkdir -p out/output
+# fpfilter output annotates the FILTER column, we grep
+# the lines with PASS to get the entries which passed fpfilter
 
-mv "${output}" "out/output/"
+grep "PASS\|#" "${annotated_output}" > "${filtered_output}"
+
+ls
+mkdir -p out/annotated_output
+mkdir -p out/filtered_output
+
+mv "${annotated_output}" "out/annotated_output/"
+mv "${filtered_output}" "out/filtered_output/"
 
 dx-upload-all-outputs
