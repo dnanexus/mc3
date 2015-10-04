@@ -16,6 +16,7 @@ samtools index "${bam_path}"
 perl ~/fpfilter.pl \
     --vcf-file "${vcf_path}" \
     --bam-file "${bam_path}" \
+    --bam-index "${bam_path}.bai" \
     --sample "${sample}" \
     --reference "${reference_path}" \
     --output "${output}" \
