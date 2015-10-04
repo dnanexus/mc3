@@ -12,41 +12,18 @@ function change_boolean_str() {
     esac
 }
 
-if [[ "$consensus" == "true" ]]; then
-    python ~/sam_pileup.py \
-        --input1="${input1_path}" \
-        --output1="${output1}" \
-        --ref=history \
-        --ownFile="${reference_path}" \
-        --bamIndex="${input1_index_path}" \
-        --lastCol="$(change_boolean_str "${lastCol}")" \
-        --indels="$(change_boolean_str "${indels}")" \
-        --mapCap=$mapCap \
-        --consensus="$(change_boolean_str "${consensus}")" \
-        --theta=$theta \
-        --hapNum=$hapNum \
-        --fraction=$fraction \
-        --phredProb=$phredProb \
-        --cpus=`nproc`
-
-else
-    python ~/sam_pileup.py \
-        --input1="${input1_path}" \
-        --output1="${output1}" \
-        --ref=history \
-        --ownFile="${reference_path}" \
-        --bamIndex="${input1_index_path}" \
-        --lastCol="$(change_boolean_str "${lastCol}")" \
-        --indels="$(change_boolean_str "${indels}")" \
-        --mapCap=$mapCap \
-        --consensus="$(change_boolean_str "${consensus}")" \
-        --theta="None" \
-        --hapNum="None" \
-        --fraction="None" \
-        --phredProb="None" \
-        --cpus=`nproc`
-fi
-
+# Removed consensus calling mode since it's not used in varscan pipeline
+# and the wrapper is latently broken (-c flag not supported in v1.2 samtools)
+python ~/sam_pileup.py \
+    --input1="${input1_path}" \
+    --output1="${output1}" \
+    --ref=history \
+    --ownFile="${reference_path}" \
+    --bamIndex="${input1_index_path}" \
+    --lastCol="$(change_boolean_str "${lastCol}")" \
+    --indels="$(change_boolean_str "${indels}")" \
+    --nobaq="$(change_boolean_str "${noBaq}")" \
+    --cpus=`nproc`
 
 ls
 mkdir -p out/pileup

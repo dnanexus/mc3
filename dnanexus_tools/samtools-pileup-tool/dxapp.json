@@ -1,6 +1,6 @@
 {
   "name": "samtools-pileup-tool",
-  "title": "samtools pileup",
+  "title": "samtools pileup 1.2",
   "dxapi": "1.0.0",
   "inputSpec": [
     {
@@ -52,45 +52,11 @@
       "default": false
     },
     {
-      "label": "Capped Map Score",
-      "help": "Value to cap mapping quality",
-      "name": "mapCap",
-      "class": "int",
-      "default": 60
-    },
-    {
-      "label": "Call consensus",
-      "help": "Whether or not to call consensus according to MAQ model",
-      "name": "consensus",
-      "class": "boolean"
-    },
-    {
-      "label": "Error dependency value",
-      "help": "Theta parameter (error dependency coefficient); only used in the MAQ consensus calling model",
-      "name": "theta",
-      "class": "float",
-      "default": 0.85
-    },
-    {
-      "label": "Haplotype number",
-      "help": "Number of haplotypes in the sample; Greater than or equal to 2; only used in the MAQ consensus calling model",
-      "name": "hapNum",
-      "class": "int",
-      "default": 2
-    },
-    {
-      "label": "Fraction of difference",
-      "help": "Expected fraction of differences between a pair of haplotypes; only used in the MAQ consensus calling model",
-      "name": "fraction",
-      "class": "float",
-      "default": 0.001
-    },
-    {
-      "label": "Phred Probability of Indel",
-      "help": "Phred probability of an indel in sequencing/prep; only used in the MAQ consensus calling model",
-      "name": "phredProb",
-      "class": "int",
-      "default": 40
+      "label": "No BAQ",
+      "help": " disable BAQ computation",
+      "name": "noBaq",
+      "class": "boolean",
+      "default": true
     }
   ],
   "outputSpec": [

@@ -1,14 +1,18 @@
 **What it does**
 
-Uses SAMTools_' pileup command to produce a pileup dataset from a provided BAM dataset. It generates two types of pileup datasets depending on the specified options. If *Call consensus according to MAQ model?* option is set to **No**, the tool produces simple pileup. If the option is set to **Yes**, a ten column pileup dataset with consensus is generated. Both types of datasets are briefly summarized below.
+Uses SAMTools_' pileup command to produce a pileup dataset from a provided BAM dataset. It generates only the simple pileup, and support for consensus calling pileup has been discontinued.
 
 .. _SAMTools: http://samtools.sourceforge.net/samtools.shtml
 
 ------
 
+**Samtools version**
+
+Samtools v1.2 is used in this applet.
+
 **Types of pileup datasets**
 
-The description of pileup format below is largely based on information that can be found on SAMTools Pileup_ documentation page. The 6- and 10-column variants are described below.
+The description of pileup format below is largely based on information that can be found on SAMTools Pileup_ documentation page. The 6-column format is described below.
 
 .. _Pileup: http://samtools.sourceforge.net/pileup.shtml
 
@@ -31,37 +35,6 @@ where::
        4 Coverage (# reads aligning over that position)
        5 Bases within reads where (see Galaxy wiki for more info)
        6 Quality values (phred33 scale, see Galaxy wiki for more)
-
-**Ten column pileup**
-
-The `ten-column` (consensus_) pileup incorporates additional consensus information generated with *-c* option of *samtools pileup* command::
-
-
-    1    2  3  4   5   6   7   8       9       10
- ------------------------------------------------
- chrM  412  A  A  75   0  25  2       .,       II
- chrM  413  G  G  72   0  25  4     ..t,     IIIH
- chrM  414  C  C  75   0  25  4     ...a     III2
- chrM  415  C  T  75  75  25  4     TTTt     III7
-
-where::
-
-  Column Definition
- ------- --------------------------------------------------------
-       1 Chromosome
-       2 Position (1-based)
-       3 Reference base at that position
-       4 Consensus bases
-       5 Consensus quality
-       6 SNP quality
-       7 Maximum mapping quality
-       8 Coverage (# reads aligning over that position)
-       9 Bases within reads where (see Galaxy wiki for more info)
-      10 Quality values (phred33 scale, see Galaxy wiki for more)
-
-
-.. _consensus: http://samtools.sourceforge.net/cns0.shtml
-
 ------
 
 **Citation**
