@@ -40,5 +40,8 @@ python ~/radia_filter.py \
 mv filtered.vcf ~/out/filtered_output_vcf/
 cd ..
 
+mkdir -p out/pass_filtered_output_vcf
+egrep "^\#|PASS" ~/out/filtered_output_vcf/filtered.vcf > ~/out/pass_filtered_output_vcf/pass_filtered.vcf
+
 dx-upload-all-outputs
 
