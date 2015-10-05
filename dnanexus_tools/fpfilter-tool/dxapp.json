@@ -34,7 +34,8 @@
       "label": "Sample",
       "help": "The sample name of the sample you want to filter on in the VCF file.",
       "name": "sample",
-      "class": "string"
+      "class": "string",
+      "default": "TUMOR"
     },
     {
       "label": "Output Prefix",
