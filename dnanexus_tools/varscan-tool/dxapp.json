@@ -33,7 +33,7 @@
       "help": "Minimum coverage in normal and tumor to call variant",
       "name": "min_coverage",
       "class": "int",
-      "default": 8
+      "default": 3
     },
     {
       "label": "min-coverage-normal",
@@ -56,7 +56,7 @@
       "help": "Minimum variant frequency to call a heterozygote",
       "name": "min_var_freq",
       "class": "float",
-      "default": 0.1
+      "default": 0.08
     },
     {
       "label": "min-var-freq-for-hom",
