@@ -57,7 +57,7 @@
       "help": "Filter reads with mapping quality less than this value",
       "name": "mapq",
       "class": "int",
-      "default": 0,
+      "default": 1,
       "optional": true
     },
     {
@@ -65,7 +65,7 @@
       "help": "Filter snv output with quality less than this value",
       "name": "somaticq",
       "class": "int",
-      "default": 15,
+      "default": 40,
       "optional": true
     },
     {
@@ -73,7 +73,7 @@
       "help": "Do not report LOH variants as determined by genotypes",
       "name": "loh",
       "class": "boolean",
-      "default": false,
+      "default": true,
       "optional": true
     },
     {
@@ -81,7 +81,7 @@
       "help": "Do not report Gain of Reference variants as determined by genotypes",
       "name": "gor",
       "class": "boolean",
-      "default": false,
+      "default": true,
       "optional": true
     },
     {
