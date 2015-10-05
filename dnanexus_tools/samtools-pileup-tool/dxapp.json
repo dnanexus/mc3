@@ -25,7 +25,8 @@
       "label": "Output prefix",
       "help": "Output prefix",
       "name": "output1",
-      "class": "string"
+      "class": "string",
+      "optional": true
     },
     {
       "patterns": [
@@ -42,7 +43,7 @@
       "help": "Whether or not to print the mapping quality as the last column",
       "name": "lastCol",
       "class": "boolean",
-      "default": false
+      "default": true
     },
     {
       "label": "Indels only",

@@ -12,6 +12,11 @@ function change_boolean_str() {
     esac
 }
 
+if [ -z "$output1" ]; then
+    output1="$input1_prefix"
+    echo "output name was determined to be $output1"
+fi
+
 # Removed consensus calling mode since it's not used in varscan pipeline
 # and the wrapper is latently broken (-c flag not supported in v1.2 samtools)
 python ~/sam_pileup.py \
