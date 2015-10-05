@@ -7,6 +7,13 @@ set -e -x -o pipefail
 dx-download-all-inputs --parallel
 
 #samtools faidx "${reference_name}"
+if [[ "$dbsnp" != "" ]]
+then
+  #tabix -p vcf "$dbsnp_path"
+  gunzip "$dbsnp_path"
+  dbsnp_path=${dbsnp_path%.gz}
+  options="-D $dbsnp_path $options"
+fi
 
 #move bai to be in same directory as bam
 mv "${tumor_bai_path}" ~/in/tumor_bam/
@@ -20,10 +27,13 @@ muse.py \
   -f "${reference_path}" \
   -m "${muse}" \
   --mode "${mode}" \
+  $options \
   -n `nproc`
 
 ls
 mkdir -p out/mutations
-mv out.vcf "out/mutations/${tumor_bam_name%.bam}.vcf"
+mkdir -p out/passmutations
+egrep "\#|PASS" out.vcf "out/passmutation/${tumor_bam_name%.bam}.muse.pass.vcf"
+mv out.vcf "out/mutations/${tumor_bam_name%.bam}.muse.vcf"
 dx-upload-all-outputs
 

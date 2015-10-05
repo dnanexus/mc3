@@ -39,6 +39,14 @@
       "patterns": ["*.fa.gz"]
     },
     {
+      "name": "dbsnp",
+      "label": "dbSNP VCF",
+      "help": "VCF containing dbSNP variants",
+      "class": "file",
+      "optional": true,
+      "patterns": ["*.vcf*"]
+    },
+    {
       "name": "muse",
       "label": "MuSE Version",
       "help": "Version of MuSE to run",
@@ -62,6 +70,13 @@
       "help": "Mutations in VCF format",
       "class": "file",
       "patterns": ["*.vcf"]
+    },
+    {
+      "name": "passmutation",
+      "label": "PASS MuSE VCF",
+      "help": "PASSing mutations in VCF format",
+      "class": "file",
+      "patterns": ["*.vcf"]
     }
   ],
   "runSpec": {
@@ -74,6 +89,7 @@
     },
     "execDepends": [
       { "name": "samtools" },
+      { "name": "tabix" },
       { "name": "pysam", "package_manager": "pip"}
     ]
   },
