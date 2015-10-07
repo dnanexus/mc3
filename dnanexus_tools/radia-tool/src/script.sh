@@ -21,13 +21,13 @@ python ~/radia.py \
   --scriptsDir ~/radia-1.1.5/scripts/ \
   --patientId 20c31348-e871-4abb-8ec6-5124f8d0170e \
   --number_of_procs `nproc`
-mv output.vcf ~/out/output_vcf/
+mv output.vcf ~/out/output_vcf/output.radia.vcf
 cd ..
 
 mkdir radiafiltertemp
 cd radiafiltertemp
 python ~/radia_filter.py \
-  --inputVCF ~/out/output_vcf/output.vcf \
+  --inputVCF ~/out/output_vcf/output.radia.vcf \
   --dnaNormalFilename "${dnaNormal_path}" \
   --dnaTumorFilename "${dnaTumor_path}" \
   --fastaFilename "${fasta_path}" \
@@ -36,12 +36,15 @@ python ~/radia_filter.py \
   --scriptsDir /home/dnanexus/radia-1.1.5/scripts/ \
   --patientId 20c31348-e871-4abb-8ec6-5124f8d0170e \
   --number_of_procs `nproc` \
-  --makeTCGAcompliant
-mv filtered.vcf ~/out/filtered_output_vcf/
+  --makeTCGAcompliant \
+  --filter-reject \
+  --filter-germline
+
+mv filtered.vcf ~/out/filtered_output_vcf/filtered.radia.vcf
 cd ..
 
 mkdir -p out/pass_filtered_output_vcf
-egrep "^\#|PASS" ~/out/filtered_output_vcf/filtered.vcf > ~/out/pass_filtered_output_vcf/pass_filtered.vcf
+egrep "^\#|PASS" ~/out/filtered_output_vcf/filtered.radia.vcf > ~/out/pass_filtered_output_vcf/pass_filtered.radia.vcf
 
 dx-upload-all-outputs
 
