@@ -37,7 +37,7 @@ fi
 if [ -z "$output" ]; then
     output="$tumor_pileup_prefix"
     output="${output%.pileup}"
-    output="${output%.mpileup}"
+    output="${output%.mpileup}.varscan"
     echo "output name was determined to be $output"
 fi
 

@@ -58,6 +58,13 @@
       "name": "noBaq",
       "class": "boolean",
       "default": true
+    },
+    {
+      "label": "Min MAPQ",
+      "help": "Skip reads with mapQ smaller than this value",
+      "name": "minMapq",
+      "class": "int",
+      "default": 1
     }
   ],
   "outputSpec": [

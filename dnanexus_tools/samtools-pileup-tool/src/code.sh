@@ -28,6 +28,7 @@ python ~/sam_pileup.py \
     --lastCol="$(change_boolean_str "${lastCol}")" \
     --indels="$(change_boolean_str "${indels}")" \
     --nobaq="$(change_boolean_str "${noBaq}")" \
+    --mapqMin="${minMapq}" \
     --cpus=`nproc`
 
 ls

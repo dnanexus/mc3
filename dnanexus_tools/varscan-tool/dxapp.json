@@ -1,6 +1,6 @@
 {
   "name": "varscan-tool",
-  "title": "varscan variant caller",
+  "title": "varscan variant caller 2.3.9",
   "dxapi": "1.0.0",
   "inputSpec": [
     {
