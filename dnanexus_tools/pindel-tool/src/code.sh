@@ -6,7 +6,7 @@ dx-download-all-inputs --parallel
 
 # Determine output name if not provided
 if [ -z "$output" ]; then
-    output="${tumorInputBamFile_prefix}"
+    output="${tumorInputBamFile_prefix}.pindel"
     echo "output name was determined to be $output"
 fi
 
