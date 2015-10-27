@@ -9,7 +9,7 @@ radiaremote:
 	wget -O resources/home/dnanexus/snpEff_latest_core.zip http://downloads.sourceforge.net/project/snpeff/snpEff_latest_core.zip
 	cd resources/home/dnanexus/; tar -xvzf v1.1.5.tar.gz
 	cd resources/home/dnanexus/; unzip snpEff_latest_core.zip
-	rm -rf v1.1.5.tar.gz snpEff_latest_core.zip snpEff/galaxy snpEff/examples
+	cd resources/home/dnanexus/; rm -rf v1.1.5.tar.gz snpEff_latest_core.zip snpEff/galaxy snpEff/examples
 
 radialocal:
 	mkdir -p resources/home/dnanexus

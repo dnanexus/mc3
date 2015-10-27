@@ -117,15 +117,6 @@
       "help": "Fpfilter annotated VCF",
       "name": "annotated_output",
       "class": "file"
-    },
-    {
-      "patterns": [
-        "*.vcf"
-      ],
-      "label": "Fpfilter filtered VCF",
-      "help": "Fpfilter filtered VCF",
-      "name": "filtered_output",
-      "class": "file"
     }
   ],
   "runSpec": {

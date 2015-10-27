@@ -36,13 +36,9 @@ perl ~/fpfilter.pl \
 # fpfilter output annotates the FILTER column, we grep
 # the lines with PASS to get the entries which passed fpfilter
 
-grep "PASS\|#" "${annotated_output}" > "${filtered_output}"
-
 ls
 mkdir -p out/annotated_output
-mkdir -p out/filtered_output
 
 mv "${annotated_output}" "out/annotated_output/"
-mv "${filtered_output}" "out/filtered_output/"
 
 dx-upload-all-outputs
