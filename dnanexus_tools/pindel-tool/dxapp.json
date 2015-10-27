@@ -175,7 +175,14 @@
       "label": "Output vcf",
       "help": "Pindel output vcf",
       "name": "outputVcf",
-      "class": "array:file"
+      "class": "file"
+    },
+    {
+      "label": "Output somatic vcf",
+      "help": "Pindel output somatic vcf",
+      "name": "outputSomaticVcf",
+      "class": "file",
+      "optional": true
     }
   ],
   "runSpec": {

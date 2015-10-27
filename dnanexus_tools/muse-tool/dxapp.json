@@ -70,13 +70,6 @@
       "help": "Mutations in VCF format",
       "class": "file",
       "patterns": ["*.vcf"]
-    },
-    {
-      "name": "passmutation",
-      "label": "PASS MuSE VCF",
-      "help": "PASSing mutations in VCF format",
-      "class": "file",
-      "patterns": ["*.vcf"]
     }
   ],
   "runSpec": {

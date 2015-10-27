@@ -55,13 +55,6 @@
       "help": "Filtered mutations in VCF format",
       "class": "file",
       "patterns": ["*.vcf"]
-    },
-    {
-      "name": "pass_filtered_output_vcf",
-      "label": "PASS Filtered Radia VCF",
-      "help": "Filtered mutations in VCF format with PASS as their filter",
-      "class": "file",
-      "patterns": ["*.vcf"]
     }
   ],
   "runSpec": {

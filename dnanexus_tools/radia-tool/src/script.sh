@@ -37,11 +37,9 @@ python ~/radia_filter.py \
   --patientId 20c31348-e871-4abb-8ec6-5124f8d0170e \
   --number_of_procs `nproc` \
   --makeTCGAcompliant
+
 mv filtered.vcf ~/out/filtered_output_vcf/
 cd ..
-
-mkdir -p out/pass_filtered_output_vcf
-egrep "^\#|PASS" ~/out/filtered_output_vcf/filtered.vcf > ~/out/pass_filtered_output_vcf/pass_filtered.vcf
 
 dx-upload-all-outputs
 

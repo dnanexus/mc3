@@ -73,7 +73,8 @@ mv "output_raw.txt" "out/outputRawFile/${output}.raw.txt"
 mv "output.vcf" "out/outputVcf/${output}.vcf"
 
 if [ -f output.somatic.vcf ]; then
-    mv "output.somatic.vcf" "out/outputVcf/${output}.somatic.vcf"
+    mkdir -p out/outputSomaticVcf/
+    mv "output.somatic.vcf" "out/outputSomaticVcf/${output}.somatic.vcf"
 fi
 
 dx-upload-all-outputs
