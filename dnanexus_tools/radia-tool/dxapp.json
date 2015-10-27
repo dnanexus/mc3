@@ -14,9 +14,9 @@
       "name": "dnaTumorBai",
       "label": "Tumor DNA BAI",
       "help": "Tumor DNA BAI",
-      "class: "file",
+      "class": "file",
       "patterns": ["*.bai"],
-      "optionaal: true
+      "optional": true
     },
     {
       "name": "dnaNormal",
@@ -29,8 +29,9 @@
       "name": "dnaNormalBai",
       "label": "Normal DNA BAI",
       "help": "Normal DNA BAI",
-      "class: "file",
-      "patterns": ["*.bai"]
+      "class": "file",
+      "patterns": ["*.bai"],
+      "optional": true
     },
     {
       "name": "rnaTumor",
@@ -81,14 +82,14 @@
     {
       "name": "radia_options",
       "label": "Radia options",
-      "name": "Options to pass to radia.py",
+      "help": "Options to pass to radia.py",
       "class": "string",
       "default": ""
     },
     {
       "name": "radia_filter_options",
       "label": "Radia filter options",
-      "name": "Options to pass to radia_filter.py",
+      "help": "Options to pass to radia_filter.py",
       "class": "string",
       "default": "--makeTCGAcompliant --filter-reject --filter-germline"
     }

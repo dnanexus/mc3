@@ -102,7 +102,8 @@ def build_workflow():
         "tumor_bai" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBaiFile"}),
         "normal_bam" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBamFile"}),
         "normal_bai" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBaiFile"}),
-        "reference" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
+        "reference" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"}),
+        "dbsnp": dxpy.dxlink("file-Bj1V0400kF9Z3GqJY4ZbYbYj")
     }
     muse_stage_id = wf.add_stage(muse_applet, stage_input=muse_input)
 
