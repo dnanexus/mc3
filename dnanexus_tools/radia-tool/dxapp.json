@@ -11,6 +11,14 @@
       "patterns": ["*.bam"]
     },
     {
+      "name": "dnaTumorBai",
+      "label": "Tumor DNA BAI",
+      "help": "Tumor DNA BAI",
+      "class: "file",
+      "patterns": ["*.bai"],
+      "optionaal: true
+    },
+    {
       "name": "dnaNormal",
       "label": "Normal DNA BAM",
       "help": "Normal DNA BAM",
@@ -18,12 +26,11 @@
       "patterns": ["*.bam"]
     },
     {
-      "name": "rnaNormal",
-      "label": "Normal RNA BAM",
-      "help": "Normal RNA BAM",
-      "class": "file",
-      "patterns": ["*.bam"],
-      "optional": true
+      "name": "dnaNormalBai",
+      "label": "Normal DNA BAI",
+      "help": "Normal DNA BAI",
+      "class: "file",
+      "patterns": ["*.bai"]
     },
     {
       "name": "rnaTumor",
@@ -34,11 +41,56 @@
       "optional": true
     },
     {
+      "name": "rnaTumorBai",
+      "label": "Tumor RNA BAI",
+      "help": "Tumor RNA BAI",
+      "class": "file",
+      "patterns": ["*.bai"],
+      "optional": true
+    },
+    {
+      "name": "rnaNormal",
+      "label": "Normal RNA BAM",
+      "help": "Normal RNA BAM",
+      "class": "file",
+      "patterns": ["*.bam"],
+      "optional": true
+    },
+    {
+      "name": "rnaNormalBai",
+      "label": "Normal RNA BAI",
+      "help": "Normal RNA BAI",
+      "class": "file",
+      "patterns": ["*.bai"],
+      "optional": true
+    },
+    {
       "name": "fasta",
       "label": "Reference genome",
       "help": "Reference genome used to align BAMs",
       "class": "file",
-      "patterns": ["*.fa.gz"]
+      "patterns": ["*.fa*"]
+    },
+    {
+      "name": "patientId",
+      "label": "Patient ID",
+      "help": "Patient ID or samples",
+      "class": "string",
+      "optional": true
+    },
+    {
+      "name": "radia_options",
+      "label": "Radia options",
+      "name": "Options to pass to radia.py",
+      "class": "string",
+      "default": ""
+    },
+    {
+      "name": "radia_filter_options",
+      "label": "Radia filter options",
+      "name": "Options to pass to radia_filter.py",
+      "class": "string",
+      "default": "--makeTCGAcompliant --filter-reject --filter-germline"
     }
   ],
   "outputSpec": [
@@ -53,13 +105,6 @@
       "name": "filtered_output_vcf",
       "label": "Filtered Radia VCF",
       "help": "Filtered mutations in VCF format",
-      "class": "file",
-      "patterns": ["*.vcf"]
-    },
-    {
-      "name": "pass_filtered_output_vcf",
-      "label": "PASS Filtered Radia VCF",
-      "help": "Filtered mutations in VCF format with PASS as their filter",
       "class": "file",
       "patterns": ["*.vcf"]
     }
