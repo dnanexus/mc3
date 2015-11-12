@@ -72,7 +72,7 @@
       "patterns": ["*.vcf"]
     },
     {
-      "name": "passmutation",
+      "name": "passmutations",
       "label": "PASS MuSE VCF",
       "help": "PASSing mutations in VCF format",
       "class": "file",

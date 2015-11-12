@@ -33,7 +33,7 @@ muse.py \
 ls
 mkdir -p out/mutations
 mkdir -p out/passmutations
-egrep "\#|PASS" out.vcf "out/passmutation/${tumor_bam_name%.bam}.muse.pass.vcf"
+egrep "\#|PASS" out.vcf > "out/passmutations/${tumor_bam_name%.bam}.muse.pass.vcf"
 mv out.vcf "out/mutations/${tumor_bam_name%.bam}.muse.vcf"
 dx-upload-all-outputs
 
