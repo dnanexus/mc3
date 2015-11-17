@@ -69,6 +69,7 @@ python ~/radia.py \
   --outputDir ~/radiatemp/ \
   -o output.vcf \
   --scriptsDir ~/radia-1.1.5/scripts/ \
+  --patientId 20c31348-e871-4abb-8ec6-5124f8d0170e \
   --number_of_procs `nproc`
 mv output.vcf ~/out/output_vcf/output.radia.vcf
 cd ..
@@ -84,6 +85,7 @@ python ~/radia_filter.py \
   --outputDir ~/radiafiltertemp/ \
   -o filtered.vcf \
   --scriptsDir /home/dnanexus/radia-1.1.5/scripts/ \
+  --patientId 20c31348-e871-4abb-8ec6-5124f8d0170e \
   --number_of_procs `nproc`
 mv filtered.vcf ~/out/filtered_output_vcf/filtered.radia.vcf
 cd ..
