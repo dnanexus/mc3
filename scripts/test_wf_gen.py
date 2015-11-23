@@ -205,6 +205,7 @@ def run_gen(args):
         "db_snp" : "dbsnp_132_b37.leftAligned.vcf",
         "centromere" : "centromere_hg19.bed",
         "reference_genome" : "Homo_sapiens_assembly19.fasta",
+        "cosmic" : "b37_cosmic_v54_120711.vcf"
     }
 
     if args.ref_download:
@@ -236,7 +237,7 @@ def run_gen(args):
     for id, ent in docstore.filter(sampleType="normal"):
         normal_uuids[ent['participant_id']] = id
 
-    mc3_workflow = GalaxyWorkflow(ga_file="workflows/Galaxy-Workflow-MC3_Pipeline.ga")
+    mc3_workflow = GalaxyWorkflow(ga_file="workflows/Galaxy-Workflow-MC3_Pipeline_Test.ga")
 
     reference_id = None
     for a in docstore.filter(name="Homo_sapiens_assembly19.fasta"):
@@ -300,7 +301,7 @@ def run_gen(args):
                 ["gatk_indel", 24],
                 ["MuSE", 8],
                 ["pindel", 8],
-                ["muTect", 8],
+                ["mutect", 8],
                 ["delly", 4],
                 ["gatk_bqsr", 12],
                 ["gatk_indel", 12],
@@ -366,12 +367,16 @@ def run_download(args):
                         "sampleType" : tmp[2],
                         "participant_id" : fake_metadata[tmp[1]]['participant_id']
                     }))
+        if tmp[-1] == "vcf":
+            subprocess.check_call("bgzip %s" % (file_path), shell=True)
+            subprocess.check_call("tabix %s.gz" % (file_path), shell=True)
+            
 
 def run_extract(args):
     docstore = from_url(args.out_base)
     
     for id, ent in docstore.filter(file_ext="vcf", name=[
-        "muse.vcf", "pindel.vcf", "radia.vcf", "somatic_sniper.vcf", 
+        "mutect.vcf", "muse.vcf", "pindel.vcf", "radia.vcf", "somatic_sniper.vcf", 
         "varscan.indel.vcf", "varscan.snp.vcf"
     ]):
         t = Target(uuid=ent['id'])
@@ -389,6 +394,7 @@ def run_extract(args):
                 shutil.copy( docstore.get_filename(t), os.path.join(donor_dir, ent['name']) )
 
 SNP_METHOD = [
+    "mutect",
     "muse",
     "radia",
     "somatic_sniper",
@@ -438,6 +444,23 @@ def run_stats(args):
             out.append( "%s" % (sum( j[i] for j in values  ) / float(len(values) )) )
         print method, "\t".join(out)
 
+def run_errors(args):
+
+    doc = from_url(args.out_base)
+
+    for id, entry in doc.filter():
+        if entry.get('state', '') == 'error':
+            if args.within is None or 'update_time' not in entry or check_within(entry['update_time'], args.within):
+                print "Dataset", id, entry.get("job", {}).get("tool_id", ""), entry.get('update_time', ''), entry.get("tags", "")
+                if args.full:
+                    if 'provenance' in entry:
+                        print "tool:", entry['provenance']['tool_id']
+                        print "-=-=-=-=-=-=-"
+                    print entry['job']['stdout']
+                    print "-------------"
+                    print entry['job']['stderr']
+                    print "-=-=-=-=-=-=-"
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -469,6 +492,12 @@ if __name__ == "__main__":
     parser_stats.set_defaults(func=run_stats)
     parser_stats.add_argument("out_dir")
 
+    parser_errors = subparsers.add_parser('errors')
+    parser_errors.add_argument("--within", type=int, default=None)
+    parser_errors.add_argument("--full", action="store_true", default=False)
+    parser_errors.add_argument("--out-base", default="test_mc3")
+    parser_errors.set_defaults(func=run_errors)
+    
     args = parser.parse_args()
 
     args.func(args)

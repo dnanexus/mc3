@@ -194,8 +194,8 @@ def run_gen(args):
             s.store(handle)
 
 def run_upload(args):
-    syn = synapseclient.Synapse()
-    syn.login()
+    #syn = synapseclient.Synapse()
+    #syn.login()
 
     docstore = from_url(args.out_base)
 
@@ -212,9 +212,18 @@ def run_upload(args):
                 donor_map[ts[1]].append(id)
             if ts[0] == 'original_bam':
                 bam_map[ts[1]] = id
+    
+    if not os.path.exists(args.out):
+        os.mkdir(args.out)
+    
+    for key, value in bam_map.items():
+        t = Target(uuid=value)
+        path = docstore.get_filename(t)
+        print "%s\t%s" % (value, path )
+        os.symlink(path, os.path.join(args.out, "MC3." + key + ".bam"))
 
-    print donor_map
-    print bam_map
+    #print donor_map
+    #print bam_map
 
 
 def run_list(args):
@@ -256,6 +265,7 @@ if __name__ == "__main__":
 
     parser_upload = subparsers.add_parser('upload-prep')
     parser_upload.add_argument("--out-base", default="mc3_gatk")
+    parser_upload.add_argument("--out", default="upload")
     parser_upload.set_defaults(func=run_upload)
 
     parser_list = subparsers.add_parser('list')
