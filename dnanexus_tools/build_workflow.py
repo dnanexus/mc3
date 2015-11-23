@@ -79,7 +79,7 @@ def build_workflow():
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
 
-    somaticsniper_stage_id = wf.add_stage(somaticsniper_applet, stage_input=somaticsniper_input)
+    somaticsniper_stage_id = wf.add_stage(somaticsniper_applet, stage_input=somaticsniper_input, instance_type="mem1_ssd2_x2")
 
     samtools_pileup_applet = find_applet("samtools-pileup-tool")
     samtools_pileup_normal_input = {
@@ -87,14 +87,14 @@ def build_workflow():
         "input1_index" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBaiFile"}),
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
-    samtools_pileup_normal_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_normal_input)
+    samtools_pileup_normal_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_normal_input, instance_type="mem1_ssd2_x2")
 
     samtools_pileup_tumor_input = {
         "input1" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBamFile"}),
         "input1_index" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBaiFile"}),
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
-    samtools_pileup_tumor_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_tumor_input)
+    samtools_pileup_tumor_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_tumor_input, instance_type="mem1_ssd2_x2")
 
     muse_applet = find_applet("muse-tool")
     muse_input = {
@@ -112,7 +112,7 @@ def build_workflow():
         "normal_pileup": dxpy.dxlink({"stage": samtools_pileup_normal_stage_id, "outputField": "pileup"}),
         "tumor_pileup": dxpy.dxlink({"stage": samtools_pileup_tumor_stage_id, "outputField": "pileup"})
     }
-    varscan_stage_id = wf.add_stage(varscan_applet, stage_input=varscan_input)
+    varscan_stage_id = wf.add_stage(varscan_applet, stage_input=varscan_input, instance_type="mem1_ssd2_x2")
 
     # fpfilter (somaticSniper, Varscan)
     fpfilter_applet = find_applet("fpfilter-tool")
@@ -187,7 +187,7 @@ def build_workflow():
 
     muse_vcf_filter_input = {
         "input_vcf": dxpy.dxlink({"stage": muse_stage_id, "outputField": "mutations"}),
-        "filterRejects": True
+        "filterRejects": False
     }
     muse_vcf_filter_stage_id = wf.add_stage(vcf_filter_applet,
                                             stage_input=muse_vcf_filter_input,
@@ -202,6 +202,98 @@ def build_workflow():
                                               stage_input=pindel_vcf_filter_input,
                                               name="vcffilter-tool(pindel)",
                                               folder="final_filtered")
+    
+    vcf_reheader_applet = find_applet("tcga-vcf-reheader")
+    radia_vcf_reheader_input = {
+        "input_vcf": dxpy.dxlink({"stage": radia_vcf_filter_stage_id, "outputField": "output_vcf"}),
+        "software_name": "radia",
+        "software_version": "1",
+        "software_params": "--dnaNormalMinTotalBases 4 --dnaNormalMinAltBases 2 --dnaNormalBaseQual 10 --dnaNormalMapQual 10 --dnaTumorDescription TumorDNASample --dnaTumorMinTotalBases 4 --dnaTumorMinAltBases 2 --dnaTumorBaseQual 10 --dnaTumorMapQual 10 --dnaNormalMitochon=MT --dnaTumorMitochon=MT --genotypeMinDepth 2 --genotypeMinPct 0.100",
+        "center": "UCSC"
+    }
+    radia_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
+                                               stage_input=radia_vcf_reheader_input,
+                                               name="vcf-reheader(radia)",
+                                               folder="final_reheadered")
+    """
+    sample_params = {
+        "platform": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "platform"}),
+        "participant_uuid": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "participant_uuid"}),
+        "disease_code": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "disease_code"}),
+        "normal_analysis_uuid": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "normal_analysis_uuid"}),
+        "normal_bam_name": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "normal_bam_name"}),
+        "normal_aliquot_uuid": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "normal_aliquot_id"}),
+        "normal_aliquot_barcode": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "normal_aliquot_barcode"}),
+        "tumor_analysis_uuid": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "tumor_analysis_uuid"}),
+        "tumor_bam_name": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "tumor_bam_name"}),
+        "tumor_aliquot_uuid": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "tumor_aliquot_uuid"}),
+        "tumor_aliquot_barcode": dxpy.dxlink({"stage": radia_vcf_reheader_stage_id, "inputField": "tumor_aliquot_barcode"})
+    }
+    """
+    somaticsniper_vcf_reheader_input = {
+        "input_vcf": dxpy.dxlink({"stage": somaticsniper_vcf_filter_stage_id, "outputField": "output_vcf"}),
+        "software_name": "somaticsniper",
+        "software_version": "v1.0.5.0",
+        "software_params": "-Q 40 -n NORMAL -q 1 -s 0.01 -r 0.001",
+        "center": "WUSTL"
+    }
+    #somaticsniper_vcf_reheader_input.update(sample_params)
+    somaticsniper_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
+                                                       stage_input=somaticsniper_vcf_reheader_input,
+                                                       name="vcf-reheader(somaticsniper)",
+                                                       folder="final_reheadered")
+    
+    varscan_snp_vcf_reheader_input = {
+        "input_vcf": dxpy.dxlink({"stage": varscan_snp_vcf_filter_stage_id, "outputField": "output_vcf"}),
+        "software_name": "varscan",
+        "software_version": "2.3.9",
+        "software_params": "--output-vcf 1 --min-coverage 3 --normal-purity 1 --p-value 0.99 --min-coverage-normal 8 --min-freq-for-hom 0.75 --min-var-freq 0.08 --somatic-p-value 0.05 --min-coverage-tumor 6 --tumor-purity 1",
+        "center": "WUSTL"
+    }
+    #varscan_snp_vcf_reheader_input.update(sample_params)
+    varscan_snp_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
+                                                     stage_input=varscan_snp_vcf_reheader_input,
+                                                     name="vcf-reheader(varscan SNP)",
+                                                     folder="final_reheadered")
+    
+    varscan_indel_vcf_reheader_input = {
+        "input_vcf": dxpy.dxlink({"stage": varscan_indel_vcf_filter_stage_id, "outputField": "output_vcf"}),
+        "software_name": "2.3.9",
+        "software_version": "1",
+        "software_params": "--output-vcf 1 --min-coverage 3 --normal-purity 1 --p-value 0.99 --min-coverage-normal 8 --min-freq-for-hom 0.75 --min-var-freq 0.08 --somatic-p-value 0.05 --min-coverage-tumor 6 --tumor-purity 1",
+        "center": "WUSTL"
+    }
+    #varscan_indel_vcf_reheader_input.update(sample_params)
+    varscan_indel_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
+                                                       stage_input=varscan_indel_vcf_reheader_input,
+                                                       name="vcf-reheader(varscan INDEL)",
+                                                       folder="final_reheadered")
+    
+    muse_vcf_reheader_input = {
+        "input_vcf": dxpy.dxlink({"stage": muse_vcf_filter_stage_id, "outputField": "output_vcf"}),
+        "software_name": "muse",
+        "software_version": "v1.0rc",
+        "software_params": "--mode wxs",
+        "center": "BCM"
+    }
+    #muse_vcf_reheader_input.update(sample_params)
+    muse_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
+                                             stage_input=muse_vcf_reheader_input,
+                                             name="vcf-reheader(muse)",
+                                             folder="final_reheadered")
+    
+    pindel_vcf_reheader_input = {
+        "input_vcf": dxpy.dxlink({"stage": pindel_vcf_filter_stage_id, "outputField": "output_vcf"}),
+        "software_name": "pindel",
+        "software_version": "v0.2.5b6",
+        "software_params": "--max_range_index 4 --window_size 5 --sequencing_error_rate 0.010000 --sensitivity 0.950000 --maximum_allowed_mismatch_rate 0.020000 --NM 2 --additional_mismatch 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --min_num_matched_bases 30 --balance_cutoff 0 --anchor_quality 0 --minimum_support_for_event 3 --report_long_insertions --report_duplications --report_inversions --report_breakpoints",
+        "center": "WUSTL"
+    }
+    #pindel_vcf_reheader_input.update(sample_params)
+    pindel_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
+                                                stage_input=pindel_vcf_reheader_input,
+                                                name="vcf-reheader(pindel)",
+                                                folder="final_reheadered")
 
     return wf
 
