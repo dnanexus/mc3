@@ -161,7 +161,7 @@
       "name": "advanced_opts",
       "class": "string",
       "optional": true,
-      "default": "--sensitivity 0.95 --balance_cutoff 0 --anchor_quality 0 --NM 2 --minimum_support_for_event 3 --additional_mismatch 1 --maximum_allowed_mismatch_rate 0.02 --min_num_matched_bases 30 --max_range_index 4 --min_perfect_match_around_BP 3 --min_inversion_size 50 --sequencing_error_rate 0.01"
+      "default": "--sensitivity 0.95 --balance_cutoff 0 --anchor_quality 0 --NM 2 --minimum_support_for_event 3 --additional_mismatch 1 --maximum_allowed_mismatch_rate 0.02 --min_num_matched_bases 30 --max_range_index 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --sequencing_error_rate 0.01"
     }
   ],
   "outputSpec": [
