@@ -1,0 +1,91 @@
+{
+  "name": "mutect-tool",
+  "title": "mutect",
+  "version": "0.0.1",
+  "inputSpec": [
+    {
+      "name": "tumor_bam",
+      "label": "Tumor BAM",
+      "help": "Tumor BAM",
+      "class": "file",
+      "patterns": ["*.bam"]
+    },
+    {
+      "name": "tumor_bai",
+      "label": "Tumor BAM index",
+      "help": "Tumor BAM index",
+      "class": "file",
+      "patterns": ["*.bai"]
+    },
+    {
+      "name": "normal_bam",
+      "label": "Normal BAM",
+      "help": "Normal BAM",
+      "class": "file",
+      "patterns": ["*.bam"]
+    },
+    {
+      "name": "normal_bai",
+      "label": "Normal BAM index",
+      "help": "Normal BAM index",
+      "class": "file",
+      "patterns": ["*.bai"]
+    },
+    {
+      "name": "reference",
+      "label": "Reference genome",
+      "help": "Reference genome used to align BAMs",
+      "class": "file",
+      "patterns": ["*.fa.gz"]
+    },
+    {
+      "name": "dbsnp",
+      "label": "dbSNP VCF",
+      "help": "VCF containing dbSNP variants",
+      "class": "file",
+      "optional": true,
+      "patterns": ["*.vcf*"]
+    },
+    {
+      "name": "cosmic",
+      "label": "COSMIC VCF",
+      "help": "VCF containing COSMIC variants",
+      "class": "file",
+      "optional": true,
+      "patterns": ["*.vcf*"]
+    },
+    {
+      "name": "options",
+      "label": "Options",
+      "help": "Additional options passed to command line",
+      "class": "string",
+      "optional": true,
+      "default": "--initial_tumor_lod 4.0 --tumor_lod 10.0"
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "mutations",
+      "label": "muTect VCF",
+      "help": "Mutations in VCF format",
+      "class": "file",
+      "patterns": ["*.vcf"]
+    }
+  ],
+  "runSpec": {
+    "interpreter": "bash",
+    "file": "src/script.sh",
+    "systemRequirements": {
+      "main": {
+        "instanceType": "mem1_ssd1_x8"
+      }
+    },
+    "execDepends": [
+      { "name": "openjdk-7-jre-headless" },
+      { "name": "samtools" },
+      { "name": "PyVCF", "package_manager": "pip"}
+    ]
+  },
+  "access": {"network": ["*"]}
+}
+
