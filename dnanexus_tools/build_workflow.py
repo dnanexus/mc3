@@ -29,7 +29,7 @@ print "folder: {}".format(args.folder)
 
 def build_applets():
     applets = ["fpfilter-tool", "muse-tool", "pindel-tool", "radia-tool", "samtools-pileup-tool",
-               "somaticsniper-tool", "tcga-vcf-filter-tool", "varscan-tool"]
+               "somaticsniper-tool", "tcga-vcf-filter-tool", "varscan-tool", "mutect-tool"]
 
     # Build applets for assembly workflow in [args.folder]/applets/ folder
     project.new_folder(applets_folder, parents=True)
@@ -113,7 +113,20 @@ def build_workflow():
         "tumor_pileup": dxpy.dxlink({"stage": samtools_pileup_tumor_stage_id, "outputField": "pileup"})
     }
     varscan_stage_id = wf.add_stage(varscan_applet, stage_input=varscan_input, instance_type="mem1_ssd2_x2")
+    
+    mutect_applet = find_applet("mutect-tool")
+    mutect_input = {
+        "tumor_bam" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBamFile"}),
+        "tumor_bai" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBaiFile"}),
+        "normal_bam" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBamFile"}),
+        "normal_bai" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBaiFile"}),
+        "reference" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"}),
+        "dbsnp": dxpy.dxlink("file-Bj1V0400kF9Z3GqJY4ZbYbYj"),
+        "cosmic": dxpy.dxlink("file-Bk9g2kQ0kF9f9XG6VZf7VGKQ"),
+    }
+    mutect_stage_id = wf.add_stage(mutect_applet, stage_input=mutect_input)
 
+    
     # fpfilter (somaticSniper, Varscan)
     fpfilter_applet = find_applet("fpfilter-tool")
 
@@ -203,6 +216,15 @@ def build_workflow():
                                               name="vcffilter-tool(pindel)",
                                               folder="final_filtered")
     
+    mutect_vcf_filter_input {
+        "input_vcf": dxpy.dxlink({"stage": mutect_stage_id, "outputField": "mutations"}),
+        "filterReject": True
+    }
+    mutect_vcf_filter_stage_id = wf.add_stage(vcf_filter_applet,
+                                              stage_input=mutect_vcf_filter_input,
+                                              name="vcffilter-tool(mutect)",
+                                              folder="final_filtered")
+    
     vcf_reheader_applet = find_applet("tcga-vcf-reheader")
     radia_vcf_reheader_input = {
         "input_vcf": dxpy.dxlink({"stage": radia_vcf_filter_stage_id, "outputField": "output_vcf"}),
@@ -258,8 +280,8 @@ def build_workflow():
     
     varscan_indel_vcf_reheader_input = {
         "input_vcf": dxpy.dxlink({"stage": varscan_indel_vcf_filter_stage_id, "outputField": "output_vcf"}),
-        "software_name": "2.3.9",
-        "software_version": "1",
+        "software_name": "varscan",
+        "software_version": "2.3.9",
         "software_params": "--output-vcf 1 --min-coverage 3 --normal-purity 1 --p-value 0.99 --min-coverage-normal 8 --min-freq-for-hom 0.75 --min-var-freq 0.08 --somatic-p-value 0.05 --min-coverage-tumor 6 --tumor-purity 1",
         "center": "WUSTL"
     }
@@ -286,13 +308,25 @@ def build_workflow():
         "input_vcf": dxpy.dxlink({"stage": pindel_vcf_filter_stage_id, "outputField": "output_vcf"}),
         "software_name": "pindel",
         "software_version": "v0.2.5b6",
-        "software_params": "--max_range_index 4 --window_size 5 --sequencing_error_rate 0.010000 --sensitivity 0.950000 --maximum_allowed_mismatch_rate 0.020000 --NM 2 --additional_mismatch 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --min_num_matched_bases 30 --balance_cutoff 0 --anchor_quality 0 --minimum_support_for_event 3 --report_long_insertions --report_duplications --report_inversions --report_breakpoints",
+        "software_params": "--max_range_index 1 --window_size 5 --sequencing_error_rate 0.010000 --sensitivity 0.950000 --maximum_allowed_mismatch_rate 0.020000 --NM 2 --additional_mismatch 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --min_num_matched_bases 30 --balance_cutoff 0 --anchor_quality 0 --minimum_support_for_event 3 --report_long_insertions --report_duplications --report_inversions --report_breakpoints",
         "center": "WUSTL"
     }
     #pindel_vcf_reheader_input.update(sample_params)
     pindel_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
                                                 stage_input=pindel_vcf_reheader_input,
                                                 name="vcf-reheader(pindel)",
+                                                folder="final_reheadered")
+    
+    mutect_vcf_reheader_input = {
+        "input_vcf": dxpy.dxlink({"stage": mutect_vcf_filter_stage_id, "outputField": "output_vcf"}),
+        "software_name": "mutect",
+        "software_version": "1.1.5",
+        "software_params": "--initial_tumor_lod 4.0 --tumor_lod 10.0",
+        "center": "Broad"
+    }
+    mutect_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
+                                                stage_input=mutect_vcf_reheader_input,
+                                                name="vcf-reheader(mutect)",
                                                 folder="final_reheadered")
 
     return wf
