@@ -231,7 +231,8 @@ def build_workflow():
         "software_name": "radia",
         "software_version": "1",
         "software_params": "--dnaNormalMinTotalBases 4 --dnaNormalMinAltBases 2 --dnaNormalBaseQual 10 --dnaNormalMapQual 10 --dnaTumorDescription TumorDNASample --dnaTumorMinTotalBases 4 --dnaTumorMinAltBases 2 --dnaTumorBaseQual 10 --dnaTumorMapQual 10 --dnaNormalMitochon=MT --dnaTumorMitochon=MT --genotypeMinDepth 2 --genotypeMinPct 0.100",
-        "center": "UCSC"
+        "center": "ucsc.edu",
+        "reference_genome": "Homo_sapiens_assembly19.fasta"
     }
     radia_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
                                                stage_input=radia_vcf_reheader_input,
@@ -257,7 +258,8 @@ def build_workflow():
         "software_name": "somaticsniper",
         "software_version": "v1.0.5.0",
         "software_params": "-Q 40 -n NORMAL -q 1 -s 0.01 -r 0.001",
-        "center": "WUSTL"
+        "center": "wustl.edu",
+        "reference_genome": "Homo_sapiens_assembly19.fasta"
     }
     #somaticsniper_vcf_reheader_input.update(sample_params)
     somaticsniper_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -270,7 +272,8 @@ def build_workflow():
         "software_name": "varscan",
         "software_version": "2.3.9",
         "software_params": "--output-vcf 1 --min-coverage 3 --normal-purity 1 --p-value 0.99 --min-coverage-normal 8 --min-freq-for-hom 0.75 --min-var-freq 0.08 --somatic-p-value 0.05 --min-coverage-tumor 6 --tumor-purity 1",
-        "center": "WUSTL"
+        "center": "wustl.edu",
+        "reference_genome": "Homo_sapiens_assembly19.fasta"
     }
     #varscan_snp_vcf_reheader_input.update(sample_params)
     varscan_snp_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -283,7 +286,8 @@ def build_workflow():
         "software_name": "varscan",
         "software_version": "2.3.9",
         "software_params": "--output-vcf 1 --min-coverage 3 --normal-purity 1 --p-value 0.99 --min-coverage-normal 8 --min-freq-for-hom 0.75 --min-var-freq 0.08 --somatic-p-value 0.05 --min-coverage-tumor 6 --tumor-purity 1",
-        "center": "WUSTL"
+        "center": "wustl.edu",
+        "reference_genome": "Homo_sapiens_assembly19.fasta"
     }
     #varscan_indel_vcf_reheader_input.update(sample_params)
     varscan_indel_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -296,7 +300,8 @@ def build_workflow():
         "software_name": "muse",
         "software_version": "v1.0rc",
         "software_params": "--mode wxs",
-        "center": "BCM"
+        "center": "mdanderson.org",
+        "reference_genome": "Homo_sapiens_assembly19.fasta"
     }
     #muse_vcf_reheader_input.update(sample_params)
     muse_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -309,7 +314,8 @@ def build_workflow():
         "software_name": "pindel",
         "software_version": "v0.2.5b6",
         "software_params": "--max_range_index 1 --window_size 5 --sequencing_error_rate 0.010000 --sensitivity 0.950000 --maximum_allowed_mismatch_rate 0.020000 --NM 2 --additional_mismatch 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --min_num_matched_bases 30 --balance_cutoff 0 --anchor_quality 0 --minimum_support_for_event 3 --report_long_insertions --report_duplications --report_inversions --report_breakpoints",
-        "center": "WUSTL"
+        "center": "wustl.edu",
+        "reference_genome": "Homo_sapiens_assembly19.fasta"
     }
     #pindel_vcf_reheader_input.update(sample_params)
     pindel_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -322,7 +328,8 @@ def build_workflow():
         "software_name": "mutect",
         "software_version": "1.1.5",
         "software_params": "--initial_tumor_lod 4.0 --tumor_lod 10.0",
-        "center": "Broad"
+        "center": "broad.org",
+        "reference_genome": "Homo_sapiens_assembly19.fasta"
     }
     mutect_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
                                                 stage_input=mutect_vcf_reheader_input,
