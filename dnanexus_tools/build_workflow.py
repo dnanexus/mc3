@@ -29,7 +29,7 @@ print "folder: {}".format(args.folder)
 
 def build_applets():
     applets = ["fpfilter-tool", "muse-tool", "pindel-tool", "radia-tool", "samtools-pileup-tool",
-               "somaticsniper-tool", "tcga-vcf-filter-tool", "varscan-tool", "mutect-tool"]
+               "somaticsniper-tool", "tcga-vcf-filter-tool", "varscan-tool", "mutect-tool", "tcga-vcf-reheader"]
 
     # Build applets for assembly workflow in [args.folder]/applets/ folder
     project.new_folder(applets_folder, parents=True)
@@ -216,9 +216,9 @@ def build_workflow():
                                               name="vcffilter-tool(pindel)",
                                               folder="final_filtered")
     
-    mutect_vcf_filter_input {
+    mutect_vcf_filter_input = {
         "input_vcf": dxpy.dxlink({"stage": mutect_stage_id, "outputField": "mutations"}),
-        "filterReject": True
+        "filterRejects": True
     }
     mutect_vcf_filter_stage_id = wf.add_stage(vcf_filter_applet,
                                               stage_input=mutect_vcf_filter_input,
