@@ -79,7 +79,7 @@ def build_workflow():
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
 
-    somaticsniper_stage_id = wf.add_stage(somaticsniper_applet, stage_input=somaticsniper_input, instance_type="mem1_ssd2_x2")
+    somaticsniper_stage_id = wf.add_stage(somaticsniper_applet, stage_input=somaticsniper_input, instance_type="mem1_ssd1_x4")
 
     samtools_pileup_applet = find_applet("samtools-pileup-tool")
     samtools_pileup_normal_input = {
@@ -87,14 +87,14 @@ def build_workflow():
         "input1_index" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBaiFile"}),
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
-    samtools_pileup_normal_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_normal_input, instance_type="mem1_ssd2_x2")
+    samtools_pileup_normal_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_normal_input, instance_type="mem1_ssd1_x4")
 
     samtools_pileup_tumor_input = {
         "input1" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBamFile"}),
         "input1_index" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBaiFile"}),
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
-    samtools_pileup_tumor_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_tumor_input, instance_type="mem1_ssd2_x2")
+    samtools_pileup_tumor_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_tumor_input, instance_type="mem1_ssd1_x4")
 
     muse_applet = find_applet("muse-tool")
     muse_input = {
@@ -112,7 +112,7 @@ def build_workflow():
         "normal_pileup": dxpy.dxlink({"stage": samtools_pileup_normal_stage_id, "outputField": "pileup"}),
         "tumor_pileup": dxpy.dxlink({"stage": samtools_pileup_tumor_stage_id, "outputField": "pileup"})
     }
-    varscan_stage_id = wf.add_stage(varscan_applet, stage_input=varscan_input, instance_type="mem1_ssd2_x2")
+    varscan_stage_id = wf.add_stage(varscan_applet, stage_input=varscan_input, instance_type="mem1_ssd1_x4")
     
     mutect_applet = find_applet("mutect-tool")
     mutect_input = {
