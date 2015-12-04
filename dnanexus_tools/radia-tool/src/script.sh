@@ -9,10 +9,10 @@ dx-download-all-inputs --parallel
 mkdir -p out/output_vcf
 mkdir -p out/filtered_output_vcf
 
-if [[ "$patient_id" != "" ]]
+if [[ "$patientId" != "" ]]
 then
-  radia_options="--patientId $patient_id $radia_options"
-  radia_filter_options="--patientId $patient_id $radia_filter_optins"
+  radia_options="--patientId $patientId $radia_options"
+  radia_filter_options="--patientId $patientId $radia_filter_optins"
 fi
 
 if [[ "$fasta_path" == *.gz ]]
