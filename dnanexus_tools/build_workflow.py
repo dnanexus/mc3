@@ -66,8 +66,8 @@ def build_workflow():
 
     radia_applet = find_applet("radia-tool")
     radia_input = {
-        "dnaNormal": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBamFile"}),
-        "dnaTumor": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBamFile"}),
+        "dnaNormalBam": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBamFile"}),
+        "dnaTumorBam": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBamFile"}),
         "fasta": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
     radia_stage_id = wf.add_stage(radia_applet, stage_input=radia_input)
@@ -79,7 +79,7 @@ def build_workflow():
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
 
-    somaticsniper_stage_id = wf.add_stage(somaticsniper_applet, stage_input=somaticsniper_input, instance_type="mem1_ssd1_x4")
+    somaticsniper_stage_id = wf.add_stage(somaticsniper_applet, stage_input=somaticsniper_input, instance_type="mem2_hdd2_x1")
 
     samtools_pileup_applet = find_applet("samtools-pileup-tool")
     samtools_pileup_normal_input = {
@@ -87,14 +87,14 @@ def build_workflow():
         "input1_index" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "normalInputBaiFile"}),
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
-    samtools_pileup_normal_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_normal_input, instance_type="mem1_ssd1_x4")
+    samtools_pileup_normal_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_normal_input, instance_type="mem2_hdd2_x1")
 
     samtools_pileup_tumor_input = {
         "input1" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBamFile"}),
         "input1_index" : dxpy.dxlink({"stage": pindel_stage_id, "inputField": "tumorInputBaiFile"}),
         "reference": dxpy.dxlink({"stage": pindel_stage_id, "inputField": "inputReferenceFile"})
     }
-    samtools_pileup_tumor_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_tumor_input, instance_type="mem1_ssd1_x4")
+    samtools_pileup_tumor_stage_id = wf.add_stage(samtools_pileup_applet, stage_input=samtools_pileup_tumor_input, instance_type="mem2_hdd2_x2")
 
     muse_applet = find_applet("muse-tool")
     muse_input = {
@@ -112,7 +112,7 @@ def build_workflow():
         "normal_pileup": dxpy.dxlink({"stage": samtools_pileup_normal_stage_id, "outputField": "pileup"}),
         "tumor_pileup": dxpy.dxlink({"stage": samtools_pileup_tumor_stage_id, "outputField": "pileup"})
     }
-    varscan_stage_id = wf.add_stage(varscan_applet, stage_input=varscan_input, instance_type="mem1_ssd1_x4")
+    varscan_stage_id = wf.add_stage(varscan_applet, stage_input=varscan_input, instance_type="mem2_hdd2_x2")
     
     mutect_applet = find_applet("mutect-tool")
     mutect_input = {
@@ -231,8 +231,7 @@ def build_workflow():
         "software_name": "radia",
         "software_version": "1",
         "software_params": "--dnaNormalMinTotalBases 4 --dnaNormalMinAltBases 2 --dnaNormalBaseQual 10 --dnaNormalMapQual 10 --dnaTumorDescription TumorDNASample --dnaTumorMinTotalBases 4 --dnaTumorMinAltBases 2 --dnaTumorBaseQual 10 --dnaTumorMapQual 10 --dnaNormalMitochon=MT --dnaTumorMitochon=MT --genotypeMinDepth 2 --genotypeMinPct 0.100",
-        "center": "ucsc.edu",
-        "reference_genome": "Homo_sapiens_assembly19.fasta"
+        "center": "ucsc.edu"
     }
     radia_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
                                                stage_input=radia_vcf_reheader_input,
@@ -258,8 +257,7 @@ def build_workflow():
         "software_name": "somaticsniper",
         "software_version": "v1.0.5.0",
         "software_params": "-Q 40 -n NORMAL -q 1 -s 0.01 -r 0.001",
-        "center": "wustl.edu",
-        "reference_genome": "Homo_sapiens_assembly19.fasta"
+        "center": "wustl.edu"
     }
     #somaticsniper_vcf_reheader_input.update(sample_params)
     somaticsniper_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -272,8 +270,7 @@ def build_workflow():
         "software_name": "varscan",
         "software_version": "2.3.9",
         "software_params": "--output-vcf 1 --min-coverage 3 --normal-purity 1 --p-value 0.99 --min-coverage-normal 8 --min-freq-for-hom 0.75 --min-var-freq 0.08 --somatic-p-value 0.05 --min-coverage-tumor 6 --tumor-purity 1",
-        "center": "wustl.edu",
-        "reference_genome": "Homo_sapiens_assembly19.fasta"
+        "center": "wustl.edu"
     }
     #varscan_snp_vcf_reheader_input.update(sample_params)
     varscan_snp_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -286,8 +283,7 @@ def build_workflow():
         "software_name": "varscan",
         "software_version": "2.3.9",
         "software_params": "--output-vcf 1 --min-coverage 3 --normal-purity 1 --p-value 0.99 --min-coverage-normal 8 --min-freq-for-hom 0.75 --min-var-freq 0.08 --somatic-p-value 0.05 --min-coverage-tumor 6 --tumor-purity 1",
-        "center": "wustl.edu",
-        "reference_genome": "Homo_sapiens_assembly19.fasta"
+        "center": "wustl.edu"
     }
     #varscan_indel_vcf_reheader_input.update(sample_params)
     varscan_indel_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -300,8 +296,7 @@ def build_workflow():
         "software_name": "muse",
         "software_version": "v1.0rc",
         "software_params": "--mode wxs",
-        "center": "mdanderson.org",
-        "reference_genome": "Homo_sapiens_assembly19.fasta"
+        "center": "mdanderson.org"
     }
     #muse_vcf_reheader_input.update(sample_params)
     muse_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -314,8 +309,7 @@ def build_workflow():
         "software_name": "pindel",
         "software_version": "v0.2.5b6",
         "software_params": "--max_range_index 1 --window_size 5 --sequencing_error_rate 0.010000 --sensitivity 0.950000 --maximum_allowed_mismatch_rate 0.020000 --NM 2 --additional_mismatch 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --min_num_matched_bases 30 --balance_cutoff 0 --anchor_quality 0 --minimum_support_for_event 3 --report_long_insertions --report_duplications --report_inversions --report_breakpoints",
-        "center": "wustl.edu",
-        "reference_genome": "Homo_sapiens_assembly19.fasta"
+        "center": "wustl.edu"
     }
     #pindel_vcf_reheader_input.update(sample_params)
     pindel_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
@@ -328,8 +322,7 @@ def build_workflow():
         "software_name": "mutect",
         "software_version": "1.1.5",
         "software_params": "--initial_tumor_lod 4.0 --tumor_lod 10.0",
-        "center": "broad.org",
-        "reference_genome": "Homo_sapiens_assembly19.fasta"
+        "center": "broad.org"
     }
     mutect_vcf_reheader_stage_id = wf.add_stage(vcf_reheader_applet,
                                                 stage_input=mutect_vcf_reheader_input,
