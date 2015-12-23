@@ -12,7 +12,7 @@ mkdir -p out/filtered_output_vcf
 if [[ "$patientId" != "" ]]
 then
   radia_options="--patientId $patientId $radia_options"
-  radia_filter_options="--patientId $patientId $radia_filter_optins"
+  radia_filter_options="--patientId $patientId $radia_filter_options"
 fi
 
 if [[ "$fasta_path" == *.gz ]]
@@ -22,27 +22,41 @@ then
   fasta_name=${fasta_name%.gz}
 fi
 
+if [[ "$rnaFasta" != "" ]]
+then
+  if [[ "$rnaFasta_path" == *.gz ]]
+  then
+    gunzip "$rnaFasta_path"
+    rnaFasta_path=${rnaFasta_path%.gz}
+    rnaFasta_name=${rnaFasta_name%.gz}
+  fi
+fi
+
 if [[ "$dnaTumorBai" != "" ]]
 then
-  dnaTumor="--dnaTumorFilename ${dnaTumor_path} --dnaTumorBaiFilename ${dnaTumorBai_path}"
+  dnaTumor="--dnaTumorFilename ${dnaTumorBam_path} --dnaTumorBaiFilename ${dnaTumorBai_path}"
 else
-  dnaTumor="--dnaTumorFilename ${dnaTumor_path}"
+  dnaTumor="--dnaTumorFilename ${dnaTumorBam_path}"
 fi
 
 if [[ "$dnaNormalBai" != "" ]]
 then
-  dnaNormal="--dnaNormalFilename ${dnaNormal_path} --dnaNormalBaiFilename ${dnaNormalBai_path}"
+  dnaNormal="--dnaNormalFilename ${dnaNormalBam_path} --dnaNormalBaiFilename ${dnaNormalBai_path}"
 else
-  dnaNormal="--dnaNormalFilename ${dnaNormal_path}"
+  dnaNormal="--dnaNormalFilename ${dnaNormalBam_path}"
 fi
 
 if [[ "$rnaTumorBam" != "" ]]
 then
   if [[ "$rnaTumorBai" != "" ]]
   then
-    rnaTumor="--rnaTumorFilename ${rnaTumor_path} --rnaTumorBaiFilename ${rnaTumorBai_path}"
+    rnaTumor="--rnaTumorFilename ${rnaTumorBam_path} --rnaTumorBaiFilename ${rnaTumorBai_path}"
   else
-    rnaTumor="--rnaTumorFilename ${rnaTumor_path}"
+    rnaTumor="--rnaTumorFilename ${rnaTumorBam_path}"
+  fi
+  if [[ "$rnaFasta" != "" ]]
+  then
+    rnaTumor="$rnaTumor --rnaTumorFasta ${rnaFasta_path}"
   fi
 fi
 
@@ -50,9 +64,13 @@ if [[ "$rnaNormalBam" != "" ]]
 then
   if [[ "$rnaNormalBai" != "" ]]
   then
-    rnaNormal="--rnaNormalFilename ${rnaNormal_path} --rnaNormalBaiFilename ${rnaNormalBai_path}"
+    rnaNormal="--rnaNormalFilename ${rnaNormalBam_path} --rnaNormalBaiFilename ${rnaNormalBai_path}"
   else
-    rnaNormal="--rnaNormalFilename ${rnaNormal_path}"
+    rnaNormal="--rnaNormalFilename ${rnaNormalBam_path}"
+  fi
+  if [[ "$rnaFasta" != "" ]]
+  then
+    rnaNormal="$rnaNormal --rnaNormalFasta ${rnaFasta_path}"
   fi
 fi
 
@@ -77,8 +95,10 @@ mkdir radiafiltertemp
 cd radiafiltertemp
 python ~/radia_filter.py \
   --inputVCF ~/out/output_vcf/output.radia.vcf \
-  --dnaNormalFilename "${dnaNormal_path}" \
-  --dnaTumorFilename "${dnaTumor_path}" \
+  $dnaTumor \
+  $dnaNormal \
+  $rnaTumor \
+  $rnaNormal \
   --fastaFilename "${fasta_path}" \
   $radia_filter_options \
   --outputDir ~/radiafiltertemp/ \

@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "inputSpec": [
     {
-      "name": "dnaTumor",
+      "name": "dnaTumorBam",
       "label": "Tumor DNA BAM",
       "help": "Tumor DNA BAM",
       "class": "file",
@@ -19,7 +19,7 @@
       "optional": true
     },
     {
-      "name": "dnaNormal",
+      "name": "dnaNormalBam",
       "label": "Normal DNA BAM",
       "help": "Normal DNA BAM",
       "class": "file",
@@ -34,7 +34,7 @@
       "optional": true
     },
     {
-      "name": "rnaTumor",
+      "name": "rnaTumorBam",
       "label": "Tumor RNA BAM",
       "help": "Tumor RNA BAM",
       "class": "file",
@@ -50,7 +50,7 @@
       "optional": true
     },
     {
-      "name": "rnaNormal",
+      "name": "rnaNormalBam",
       "label": "Normal RNA BAM",
       "help": "Normal RNA BAM",
       "class": "file",
@@ -71,6 +71,14 @@
       "help": "Reference genome used to align BAMs",
       "class": "file",
       "patterns": ["*.fa*"]
+    },
+    {
+      "name": "rnaFasta",
+      "label": "RNA Reference genome",
+      "help": "RNA Reference genome",
+      "class": "file",
+      "patterns": ["*.fa*"],
+      "optional": true
     },
     {
       "name": "patientId",
@@ -119,7 +127,6 @@
       }
     },
     "execDepends": [
-      { "name": "samtools" },
       { "name": "tabix" },
       { "name": "pysam", "package_manager": "pip"},
       { "name": "PyVCF", "package_manager": "pip"}
