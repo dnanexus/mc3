@@ -307,7 +307,7 @@ def build_workflow():
     pindel_vcf_reheader_input = {
         "input_vcf": dxpy.dxlink({"stage": pindel_vcf_filter_stage_id, "outputField": "output_vcf"}),
         "software_name": "pindel",
-        "software_version": "v0.2.5b6",
+        "software_version": "v0.2.5b8",
         "software_params": "--max_range_index 1 --window_size 5 --sequencing_error_rate 0.010000 --sensitivity 0.950000 --maximum_allowed_mismatch_rate 0.020000 --NM 2 --additional_mismatch 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --min_num_matched_bases 30 --balance_cutoff 0 --anchor_quality 0 --minimum_support_for_event 3 --report_long_insertions --report_duplications --report_inversions --report_breakpoints",
         "center": "wustl.edu"
     }
