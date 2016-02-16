@@ -37,8 +37,8 @@ map { chomp; my @t = split;
     if ($t[32] + $t[34] + $t[36] >= $paras{'cov'} && $t[33] + $t[34] + $t[36] >= $paras{'cov'} && $t[39] + $t[41] + $t[43] >= $paras{'cov'} && $t[40] + $t[41] + $t[43] >= $paras{'cov'}) {
         if ( ($t[34] + $t[36])  == 0 && ($t[41] + $t[43])/($t[39] + $t[41] + $t[43]) >= $paras{'vaf'} && (($t[41] + $t[43])/($t[40] + $t[41] + $t[43]) >= $paras{'vaf'} ) ) {
             #print; print "\n";
-            # no complex
-            if ( $t[1] eq "I" || ($t[1] eq "D" && $t[4] == 0) ) {
+            # allow complex
+            if ( $t[1] eq "I" || ($t[1] eq "D" && $t[4] == 0) || ($t[1] eq "D" && $t[4] > 0) ) {
                 $nocomplex_output_fh->print($_."\n");
             }
         }
@@ -55,7 +55,7 @@ my ( undef, $pindel2vcf_output ) = tempfile();
 # run pindel2vcf
 #
 my $pindel2vcf_command = "";
-$pindel2vcf_command = "$paras{'pindel2vcf'} -C OHSU -R $paras{'referencename'} -r $paras{'reference'} -p $nocomplex_output -d $paras{'referencedate'} -v $pindel2vcf_output";
+$pindel2vcf_command = "$paras{'pindel2vcf'} -R $paras{'referencename'} -r $paras{'reference'} -p $nocomplex_output -d $paras{'referencedate'} -v $pindel2vcf_output";
 print $pindel2vcf_command."\n";
 system( $pindel2vcf_command );
 
