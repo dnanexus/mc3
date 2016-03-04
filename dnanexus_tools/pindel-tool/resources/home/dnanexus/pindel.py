@@ -67,7 +67,7 @@ def pindel(reference, configFile, args, tempDir, chrome=None):
     opt_list = [
         ["number_of_threads", "%d"],
         ["max_range_index", "%d"],
-        ["window_size", "%d"],
+        ["window_size", "%f"],
         ["sequencing_error_rate", "%f"],
         ["sensitivity", "%f"],
         ["maximum_allowed_mismatch_rate", "%f"],
@@ -189,7 +189,7 @@ def __main__():
     parser.add_argument('--number_of_procs', dest='procs', type=int, default=1)
 
     parser.add_argument('-x', '--max_range_index', dest='max_range_index', type=int, default=None)
-    parser.add_argument('--window_size', dest='window_size', type=int, default=None)
+    parser.add_argument('--window_size', dest='window_size', type=float, default=None)
     parser.add_argument('--sequencing_error_rate', dest='sequencing_error_rate', type=float, default=None)
     parser.add_argument('--sensitivity', dest='sensitivity', default=None, type=float)
     parser.add_argument('--report_long_insertions', dest='report_long_insertions', action='store_true', default=False)

@@ -2,7 +2,17 @@
 
 set -e -x -o pipefail
 
-dx-download-all-inputs --parallel
+dx-download-all-inputs --except tumorInputBaiFile --except normalInputBaiFile
+
+if [ -n "$tumorInputBaiFile" ]; then
+    mkdir -p "/home/dnanexus/in/tumorInputBaiFile"
+    dx download "${tumorInputBaiFile}" -o "${tumorInputBaiFile_path}"
+fi
+
+if [ -n "$normalInputBaiFile" ]; then
+    mkdir -p "/home/dnanexus/in/normalInputBaiFile"
+    dx download "${normalInputBaiFile}" -o "${normalInputBaiFile_path}"
+fi
 
 # Determine output name if not provided
 if [ -z "$output" ]; then
@@ -18,9 +28,13 @@ if [ -z "$normalInputBamFile" ]; then
     fi
 else
     sampleArgs="-b $normalInputBamFile_path -b $tumorInputBamFile_path -t NORMAL -t TUMOR -bi $normalInputBaiFile_path -bi $tumorInputBaiFile_path"
-    if [ -n "$tumorInsertSize" && -n "normalInsertSize" ]; then
-        sampleArgs="${sampleArgs} -s normalInsertSize -s tumorInsertSize"
+    if [ -n "$tumorInsertSize" && -n "$normalInsertSize" ]; then
+        sampleArgs="${sampleArgs} -s $normalInsertSize -s $tumorInsertSize"
     fi
+fi
+
+if [ -n "$exclude" ]; then
+    sampleArgs="${sampleArgs} -J $exclude_path"
 fi
 
 # Prepare output argument
@@ -55,12 +69,17 @@ if [[ $report_interchromosomal_events == "true" ]]; then
     reportArgs="${reportArgs} --report_interchromosomal_events"
 fi
 
+totalproc=`nproc`
+numthread=1
+(( numproc=$totalproc/$numthread ))
+
 python ~/pindel.py \
 -r $inputReferenceFile_path \
 -R $referenceName \
 $sampleArgs \
 $outputArgs \
---number_of_procs `nproc` \
+--number_of_procs $numproc \
+--number_of_threads $numthread \
 --window_size $window_size \
 $reportArgs \
 $advanced_opts

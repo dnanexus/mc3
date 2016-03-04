@@ -1,6 +1,6 @@
 {
   "name": "pindel-tool",
-  "title": "pindel",
+  "title": "pindel-tool",
   "dxapi": "1.0.0",
   "inputSpec": [
     {
@@ -59,6 +59,16 @@
       "default": "HG19"
     },
     {
+      "label": "Regions to exclude",
+      "help": "bed file containing regions to exclude",
+      "name": "exclude",
+      "class": "file",
+      "patterns": [
+        "*.bed"
+      ],
+      "optional": true
+    },
+    {
       "label": "Tag",
       "help": "Tag for this sample",
       "name": "sampleTag",
@@ -101,8 +111,8 @@
       "label": "window size",
       "name": "window_size",
       "help": "for saving RAM, divides the reference in bins of X million bases and only analyzes the reads that belong in the current bin, (default=5 million)",
-      "class": "int",
-      "default": 5
+      "class": "float",
+      "default": 0.1
     },
     {
       "label": "Report inversions",
@@ -161,7 +171,8 @@
       "name": "advanced_opts",
       "class": "string",
       "optional": true,
-      "default": "--sensitivity 0.95 --balance_cutoff 0 --anchor_quality 0 --NM 2 --minimum_support_for_event 3 --additional_mismatch 1 --maximum_allowed_mismatch_rate 0.02 --min_num_matched_bases 30 --max_range_index 1 --min_perfect_match_around_BP 3 --min_inversion_size 50 --sequencing_error_rate 0.01"
+      "default": "-x 1 --sensitivity 0.95 --balance_cutoff 100 --anchor_quality 0 --NM 2 --minimum_support_for_event 1 --additional_mismatch 1 --maximum_allowed_mismatch_rate 0.02 --min_num_matched_bases 30 --max_range_index 1 --min_perfect_match_around_BP 6 --min_inversion_size 50 --sequencing_error_rate 0.01"
+
     }
   ],
   "outputSpec": [
